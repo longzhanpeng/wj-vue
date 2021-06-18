@@ -1,6 +1,6 @@
 <template>
-  <div>
-    Hello world
+  <div id="appIndex">
+    Home
   </div>
 </template>
 
@@ -11,5 +11,7 @@ export default {
 </script>
 
 <style scoped>
-
+#appIndex {
+  margin-top: 20px;
+}
 </style>
