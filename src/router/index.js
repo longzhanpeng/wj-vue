@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
 import AppIndex from '../components/home/Appindex'
 import Login from '../components/Login'
 import Home from '../components/Home'
@@ -11,6 +10,12 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   routes: [
+    {
+      path: '/',
+      name: 'default',
+      redirect: '/home',
+      component: Home
+    },
     {
       path: '/home',
       name: 'Home',
@@ -37,14 +42,14 @@ export default new Router({
       ]
     },
     {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
       path: '/login',
       name: 'Login',
       component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: () => import('../components/Register')
     }
   ]
 })
