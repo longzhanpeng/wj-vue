@@ -37,16 +37,30 @@
 
 <script>
 export default {
-  name: 'SideMenu'
+  name: 'SideMenu',
+  data () {
+    return {
+      cid: ''
+    }
+  },
+  methods: {
+    handleSelect (key, keyPath) {
+      // alert(key)
+      console.log('key:' + key)
+      this.cid = key
+      // emit，即触发，在子组件中使用 $emit 方法，即可触发在父组件中定义的事件
+      this.$emit('indexSelect')
+    }
+  }
 }
 </script>
 
 <style scoped>
 .categories {
-  /*position: fixed;*/
-  /*margin-left: 50%;*/
-  /*left: -600px;*/
-  /*top: 100px;*/
+  /*position: fixed;
+  margin-left: 50%;
+  top: 100px;*/
+  /*left: 600px;*/
   width: 150px;
 }
 </style>
