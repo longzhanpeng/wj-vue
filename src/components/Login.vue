@@ -49,7 +49,8 @@ export default {
             console.log('patch:' + path)
             this.$router.replace({path: path === '/' || path === undefined ? '/index' : path})
           } else {
-            this.$message.error('账号或者密码错误')
+            var message = successResponse.data.message
+            this.$message.error(message)
           }
         })
         .catch(failResponse => {
@@ -73,7 +74,7 @@ export default {
 }
 
 .login_title {
-  margin: 0px auto 40px auto;
+  margin: 0 auto 40px auto;
   text-align: center;
   color: #505458;
 }
