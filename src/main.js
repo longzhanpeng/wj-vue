@@ -57,9 +57,9 @@ const initAdminMenu = (router, store) => {
     return
   }
   axios.get('/menu').then(resp => {
-    console.log('menuResp===>:' + resp)
+    // console.log('menuResp===>:' + resp)
     if (resp && resp.status === 200) {
-      console.log('menu===>:' + resp)
+      // console.log('menu===>:' + resp)
       var fmtRoutes = formatRoutes(resp.data.result)
       router.addRoutes(fmtRoutes)
       store.commit('initAdminMenu', fmtRoutes)
