@@ -20,9 +20,19 @@ Vue.use(ElementUI)
 
 // router.beforeEach()，意思是在访问每一个路由前调用
 router.beforeEach((to, from, next) => {
-  console.log('to:' + to.meta.requireAuth)
+  // console.log('to.path:' + to.path)
+  // console.log('store.state' + store.state.username)
+  if (store.state.username && to.path.startsWith('/admin')) {
+    // console.log('initAdminMenu')
+    initAdminMenu(router, store)
+  }
+  if (store.state.username && to.path.startsWith('/login')) {
+    next({
+      name: 'Dashboard'
+    })
+  }
   if (to.meta.requireAuth) {
-    if (store.state.user.username) {
+    if (store.state.username) {
       axios.get('/authentication').then(resp => {
         console.log(resp)
         if (resp.data) {
@@ -39,6 +49,47 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
+
+// 初始化菜单
+const initAdminMenu = (router, store) => {
+  // 防止重复触发加载菜单操作
+  if (store.state.adminMenus.length > 0) {
+    return
+  }
+  axios.get('/menu').then(resp => {
+    console.log('menuResp===>:' + resp)
+    if (resp && resp.status === 200) {
+      console.log('menu===>:' + resp)
+      var fmtRoutes = formatRoutes(resp.data.result)
+      router.addRoutes(fmtRoutes)
+      store.commit('initAdminMenu', fmtRoutes)
+    }
+  })
+}
+
+// 把接口返回的路由信息，格式化
+const formatRoutes = (routes) => {
+  console.log(routes)
+  let fmtRoutes = []
+  routes.forEach(route => {
+    if (route.children) {
+      route.children = formatRoutes(route.children)
+    }
+
+    let fmtRoute = {
+      path: route.path,
+      component: resolve => {
+        require(['./components/admin/' + route.component + '.vue'], resolve)
+      },
+      name: route.name,
+      nameZh: route.nameZh,
+      iconCls: route.iconCls,
+      children: route.children
+    }
+    fmtRoutes.push(fmtRoute)
+  })
+  return fmtRoutes
+}
 
 /* eslint-disable no-new */
 new Vue({
