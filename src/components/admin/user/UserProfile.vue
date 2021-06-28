@@ -56,7 +56,7 @@
           width="100">
         </el-table-column>
         <el-table-column
-          prop="username"
+          prop="userName"
           label="用户名"
           fit>
         </el-table-column>

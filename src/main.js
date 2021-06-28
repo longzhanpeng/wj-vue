@@ -20,8 +20,7 @@ Vue.use(ElementUI)
 
 // router.beforeEach()，意思是在访问每一个路由前调用
 router.beforeEach((to, from, next) => {
-  // console.log('to.path:' + to.path)
-  // console.log('store.state' + store.state.username)
+  console.log('beforeEach' + store.state.username)
   if (store.state.username && to.path.startsWith('/admin')) {
     // console.log('initAdminMenu')
     initAdminMenu(router, store)
@@ -31,6 +30,7 @@ router.beforeEach((to, from, next) => {
       name: 'Dashboard'
     })
   }
+  // 如果前端没有登录信息则直接拦截，如果有则判断后端是否正常登录（防止构造参数绕过）
   if (to.meta.requireAuth) {
     if (store.state.username) {
       axios.get('/authentication').then(resp => {
@@ -90,6 +90,20 @@ const formatRoutes = (routes) => {
   })
   return fmtRoutes
 }
+
+// http response 拦截器
+axios.interceptors.response.use(
+  response => {
+    return response
+  },
+  error => {
+    if (error) {
+      store.commit('logout')
+      router.replace('/login')
+    }
+    // 返回接口返回的错误信息
+    return Promise.reject(error)
+  })
 
 /* eslint-disable no-new */
 new Vue({
